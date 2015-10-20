@@ -1,0 +1,205 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+
+
+body {
+	background-color: green;
+	background-image: url('../img/rainforest_02_blur.jpg');
+	background-attachment: fixed;
+	background-size: cover;
+	height: 100%;
+	padding-bottom: 250px; 
+}
+
+
+header {
+width: 100%;
+height: 100px;
+background-color: rgba(34, 51, 30, .8);
+text-align: center;
+}
+
+
+/*font-family:'Carve W01 Regular';
+font-family:'PPJungleBonesW00-Regula';
+font-family:'Rainforest W00 Inline';
+font-family:'Rainforest W00 Regular';
+font-family:'AvenirNextLTW01-Regular';
+font-family:'Avenir Next LT W01 Demi';
+*/
+
+
+header h1 {
+	color: #ffdc00;
+	font-family:'PPJungleBonesW00-Regula';
+	font-size: 5em;
+	font-weight: 200;
+	line-height: 1.25;
+}
+
+section#questionHolder {
+	max-width: 500px;
+	margin: auto;
+	margin-top: 2.5em;
+}
+
+div.question {
+	background-color: #fffde1;
+	width: 100%;
+	padding: 5%;
+	border: solid 2px rgb(34, 51, 30);
+	border-radius: 10px;
+	font-family:'AvenirNextLTW01-Regular';
+	color: #111111;
+}
+
+div.question h2 {
+	text-align: center;
+	color: #d5652c;
+	font-family:'Avenir Next LT W01 Demi';
+	font-weight: 600;
+	font-size: 2em;
+	margin-bottom: .5em
+}
+
+fieldset {
+	border: 0 none;
+}
+
+legend {
+	border: 0 none;
+	border-color: green;
+	font-size: 1.5em;
+	text-align: center;
+	margin-bottom: .5em;
+}
+
+
+label {
+	display: block;
+	line-height: 2.5;
+	font-size: 1.25em;
+	cursor: pointer;					
+}
+
+label em {
+		font-family:'Avenir Next LT W01 Demi';
+		font-style: normal;
+}
+
+/* ***********************************
+technique on styling accessible radio buttons
+by Heydon Pickering sen on sitepoint article
+**************************************  */
+
+
+
+[type="radio"] {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+
+
+
+
+[type="radio"] + span {
+	display: block;
+}
+
+[type="radio"] + span:before {
+	display: inline-block;
+	content: '';
+	width: 1em;
+	height: 1em;
+	vertical-align: -.25em;
+	border-radius: 1em;
+	border: .125em solid #fff;
+	box-shadow: 0 0 0 1px green;
+	margin-right: 1em;
+	margin-left: .5em;
+	transition: .5s ease all;
+}
+
+[type="radio"]:checked + span:before {
+	background: green;
+	box-shadow: 0 0 0 2px green;
+}
+
+[type="radio"]:focus + span {	
+	outline: dashed .125em #888;
+
+}
+
+
+[type="submit"] {
+	background-color: #d5652c;
+	display: block;
+	margin: auto;
+	padding: .75em 1em;
+	border: none;
+	border-radius: 7px;
+	font-family:'Avenir Next LT W01 Demi';
+	color: white;
+	font-size: 1.25em;
+	margin-top: 1em;
+	cursor: pointer;
+}
+
+[type="submit"]:hover {
+	text-decoration: underline;
+	background-color: #6fb353;
+
+}
+
+
+section.progressBar {
+	max-width: 500px;
+	margin: auto;
+	margin-top: 2.5em;
+	background-color: rgba(30, 113, 184, 1.0);
+	height: 100px;
+	border-radius: 7px;
+	position: relative;
+	border: 1px solid rgba(250, 250, 250, .5);
+}
+
+
+div.barSection {
+	float: left;
+	width: 25%;
+	height:50%;
+	border-right: 1px solid rgba(250, 250, 250, .5);
+	margin-top:10% 
+}
+
+div.barSection:last-child {
+	border:none;
+} 
+
+
+ {
+	float: left;
+	position: absolute;
+	height: 150px;
+	background-color: rgba(30, 113, 184, 0.65);
+	width: 100%;
+	bottom: 0;
+
+}
+

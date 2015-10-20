@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Rainforest Quiz</title>
+
+	<!-- webfonts -->
+	<link type="text/css" rel="stylesheet" href="http://fast.fonts.net/cssapi/d30ee67a-e8a2-4b54-86e7-25b7f048a046.css"/>
+
+	<!-- general style sheet -->
+	<link rel="stylesheet" type="text/css" href="css/myStyles.css">
+	
+</head>
+<body>
+
+	<header>
+		<div id="headerTitle">
+			<h1>Rainforest Quiz</h1>
+		</div>
+	</header>
+
+	<section id="questionHolder">
+		<div class="question">
+			<h2 class="questionH2">Question 1</h2>
+
+			<form>
+				<fieldset>
+					<legend>How much sunlight typically makes it's way to the forest floor of a rainforest?</legend>
+					
+					<label for"a1">
+						<input id="a1" type="radio" name="questionOne" required value="answer">
+						<span><em>99%</em> &#8210 It's bright and sunny!</span>
+					</label>
+
+					
+					<label for"a2">
+						<input id="a2" type="radio" name="questionOne"  value="answer">
+						<span><em>70%</em> &#8210 There is soft hazy light.</span>
+					</label>
+
+					<label for"a3">
+						<input id="a3" type="radio" name="questionOne"  value="answer">
+						<span><em>40%</em> &#8210 It's kind of dark...</span>
+					</label>
+
+					
+					<label for"a4">
+						<input id="a4" type="radio" name="questionOne"  value="answer">
+						<span><em>1%</em> &#8210 Who turned out the lights?</span>
+					</label>
+				</fieldset>	
+
+				<input type="submit" value="Check Answer">
+
+
+				
+			</form>
+
+		</div>
+	</section>
+
+	<section class="progressBar">
+		<h2>Progress: <span class="answered">0</span> out of <span class="questionCount">4</span></h2>
+		<div class="barSection"></div>
+		<div class="barSection"></div>
+		<div class="barSection"></div>
+		<div class="barSection"></div>
+	</section>
+	
+	<footer>
+		<div>
+		</div>
+	</footer>		
+
+	<script src="js/jquery-1.11.3.js"></script>
+	<script src="js/myJS.js"></script>
+</body>
+</html>
