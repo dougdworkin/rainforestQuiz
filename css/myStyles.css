@@ -10,6 +10,36 @@ html {
   box-sizing: inherit;
 }
 
+div#intro {
+	background-color: green;
+	width: 100%;
+	height: 100%;
+	position:fixed; 
+	top: 0; 
+	left: 0;
+}
+
+
+div#intro button {
+	padding: 2em;
+	display: block;
+	margin: auto;
+	border-radius: 7px;
+	border: none;
+	margin-top: 7em;
+}
+
+div#intro header h1 {
+	color: #ffdc00;
+	font-family:'PPJungleBonesW00-Regula';
+	font-size: 4.5em;
+	font-weight: 200;
+	
+}
+
+div#quizPage {
+	display: none;
+}
 
 
 body {
@@ -52,6 +82,7 @@ section#questionHolder {
 	margin: auto;
 	margin-top: 2em;
 }
+
 
 div.question {
 	background-color: #fffde1;
@@ -147,7 +178,7 @@ by Heydon Pickering sen on sitepoint article
 }
 
 
-[type="submit"] {
+[type="submit"], div#intro button {
 	background-color: #d5652c;
 	display: block;
 	margin: auto;
@@ -161,7 +192,13 @@ by Heydon Pickering sen on sitepoint article
 	cursor: pointer;
 }
 
-[type="submit"]:hover {
+div#intro button {
+	border: solid 2px #fff;
+	font-size: 2em;
+	border-radius: 13px;
+}
+
+[type="submit"]:hover, div#intro button:hover {
 	text-decoration: underline;
 	background-color: #6fb353;
 
@@ -197,7 +234,7 @@ div.barSection {
 	width: 25%;
 	height:50%;
 	border-right: 1px solid rgba(250, 250, 250, .5);
-	margin-top:10% 
+	margin-top:10%;
 }
 
 div.barSection:last-child {
@@ -205,13 +242,8 @@ div.barSection:last-child {
 } 
 
 
- {
-	float: left;
-	position: absolute;
-	height: 150px;
-	background-color: rgba(30, 113, 184, 0.65);
-	width: 100%;
-	bottom: 0;
-
+.answer {
+	display: none;
 }
+
 
