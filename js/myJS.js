@@ -2,8 +2,9 @@ $(document).ready(function(){
 
 
 
-var		questionCount = 0,
+var		progress = 0,
 		score = 0,
+		answer,
 		quizQuestions =  [
 
 			//Question One	
@@ -61,45 +62,60 @@ var		questionCount = 0,
 		];
 
 
-//starts quiz
+//starts quiz when "Start quiz" button is pressed
 function startQuiz() {
-	$('div#intro').slideUp(800);
-	$('div#quizPage').css('display', 'block');
-	console.log (quizQuestions[0].question);
-	questionSetUp(quizQuestions[0]);	
+	$('div#intro').slideUp(800); //div slides up revealing quiz
+	$('div#quizPage').css('display', 'block'); // first quiz question is shown
+	questionSetUp(quizQuestions[progress]); // question added to card
+	progress++;	// add one to the progress count
 }
 
 
-//place questions & options in question card
+//place questions & choices in the question card
 function questionSetUp(question){
 	var questionTxt = $('.question legend'),
 		answerList = $('div#choiceArea');
-	var	listItem = '<label for"a' + i + '">' +
-					'<input id="a' + i + '"'+
-					' type="radio" name="questionOne" required value="answer">' +
-					'<span>' + question.choices[i-1] +
-					'</label>';
+	//enter question #	
+	$('.question > h2 > span.qNumber').html(progress + 1);
 	//enter question in legend
 	questionTxt.html(question.question);
-	// enter choices as list items
+	// loop through choice array and enter input choices and labels 
 	for (var i = 0; i < question.choices.length; i++){
-		answerList.append(listItem);	
+		answerList.append('<label for"a' + (i+1) + '">' +
+					'<input id="a' + (i+1) + '"'+
+					' type="radio" name="questionOne" required value="' + i + '">' +
+					'<span>' + question.choices[i] +
+					'</label>');	
 	}	
 }
 
 
-function cardFlip(){
+
+
+// hides question and checks/reveals answer and gives expanation
+function checkAnswer(){
+	event.preventDefault();
+
+	//log answer
+	answer = $('input[type="radio"]:checked').val();
 	
-	alert('click worked');
+	$('div.question.choices').fadeOut();
+	$('div.question.answer').fadeIn();
+	//check if right or wrong and display result
+	if(answer == quizQuestions[progress-1].answer) {
+		$('h3.rightWrong').append('Correct!');	
+	} else {
+		$('h3.rightWrong').append('Nice Try but incorrect');
+	}
+
 }
-
-
 
 
 
 $('div#intro button').on('click', startQuiz);
 
-$('div.front').on('click', cardFlip);
+$('div.question.choices input[type="submit"]').on('click', checkAnswer);
+
 
 
 

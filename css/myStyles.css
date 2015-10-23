@@ -92,6 +92,7 @@ div.question {
 	border-radius: 10px;
 	font-family:'AvenirNextLTW01-Regular';
 	color: #111111;
+	min-height:450px;
 }
 
 div.question h2 {
@@ -178,7 +179,7 @@ by Heydon Pickering sen on sitepoint article
 }
 
 
-[type="submit"], div#intro button {
+[type="submit"], div#intro button, button.nextQ {
 	background-color: #d5652c;
 	display: block;
 	margin: auto;
@@ -198,7 +199,7 @@ div#intro button {
 	border-radius: 13px;
 }
 
-[type="submit"]:hover, div#intro button:hover {
+[type="submit"]:hover, div#intro button:hover, button.nextQ:hover {
 	text-decoration: underline;
 	background-color: #6fb353;
 
