@@ -9,7 +9,7 @@ var		progress = 0,
 
 			//Question One	
 			{ 	question : 	"How much sunlight typically " +
-							" makes it's way to the forest floor??",
+							" makes it's way to the forest floor?",
 				choices: 	[
 								"<em>99%</em> - It's bright and sunny!x",
 								"<em>70%</em> - There is a sofy hazy light.x",
@@ -24,26 +24,28 @@ var		progress = 0,
 			},
 
 			//Question two		
-			{ 	question : 	"This is question 2", 
+			{ 	question : 	"Tropical rainforests only cover about 6% of the Earth’s surface." +
+							"<span>How many of all known species of plants and animals live in them?</span>", 
 				choices: 	[
-								"<em>99%</em> - It's bright and sunny!",
-								"<em>70%</em> - There is a sofy hazy light.",
-								"<em>40%</em> - It's kind of dark...",
-								"<em>1%</em> - Who turned out the lights?"
+								"About a quarter",
+								"One third",
+								"More than half",
+								"Everyone's there but you"
 							],
-				answer: 	3,
-				infoSection:"More infirmation about the brightness goes here" 								
+				answer: 	2,
+				infoSection:"More information about the % of species goes here" 								
 			},
 
 			//Question three		
-			{ 	question : 	"This is question 3", 
+			{ 	question : 	"How many separate uncontacted tribes are left" +
+							"in the Brazilian Amazon rainforest?", 
 				choices: 	[
-								"<em>99%</em> - It's bright and sunny!",
-								"<em>70%</em> - There is a sofy hazy light.",
-								"<em>40%</em> - It's kind of dark...",
-								"<em>1%</em> - Who turned out the lights?"
+								"At least 77",
+								"About 54",
+								"Between 15 and 25",
+								"No more than 6"
 							],
-				answer: 	3,
+				answer: 	0,
 				infoSection:"More infirmation about the brightness goes here" 								
 			},
 
@@ -64,10 +66,12 @@ var		progress = 0,
 
 //starts quiz when "Start quiz" button is pressed
 function startQuiz() {
+	$('div.back').hide();
 	$('div#intro').slideUp(800); //div slides up revealing quiz
 	$('div#quizPage').css('display', 'block'); // first quiz question is shown
 	questionSetUp(quizQuestions[progress]); // question added to card
 	progress++;	// add one to the progress count
+	$('div.question.choices input[type="submit"]').on('click', checkAnswer);
 }
 
 
@@ -76,7 +80,7 @@ function questionSetUp(question){
 	var questionTxt = $('.question legend'),
 		answerList = $('div#choiceArea');
 	//enter question #	
-	$('.question > h2 > span.qNumber').html(progress + 1);
+	$('.question > h2 > span.qNumber.front').html(progress + 1);
 	//enter question in legend
 	questionTxt.html(question.question);
 	// loop through choice array and enter input choices and labels 
@@ -96,18 +100,33 @@ function questionSetUp(question){
 	}	
 }
 
+// set up flip plogin for divs
+function mySideChange(front) {
+    if (front) {
+        $('div.front').show();
+        $('div.back').hide();
+        
+    } else {
+        $('div.front').hide();
+        $('div.back').show();
+    }
+}
 
 
 // hides question and checks/reveals answer and gives expanation
 function checkAnswer(){
 	event.preventDefault();
 
+	$('h3.rightWrong').html('');
+	$('p.answerDetails').html('');
+
 //log answer
 	answer = $('input[type="radio"]:checked').val();
 	
-	$('div.question.choices').fadeOut();
-	$('div.question.answer').fadeIn();
-
+// plug in flips question to answer div
+	$('div.front').rotate3Di('flip', 250, {direction: 'clockwise', sideChange: mySideChange});
+ 
+$('.question > h2 > span.qNumber.back').html(progress);
 //check if right or wrong and display result
 	if(answer == quizQuestions[progress-1].answer) {
 		$('h3.rightWrong').append('Correct!');	
@@ -133,11 +152,13 @@ function clearAll() {
 	$('p.answerDetails').html('');
 }
 
+
 function nextQuestion(){
-// hide answer panel - show question panel
-	$('div.question.answer').fadeOut();
-	$('div.question.choices').fadeIn();
-	clearAll();
+	$('.question legend').html('');
+	$('div#choiceArea').html('');
+
+// flip answer panel - show question panel
+	$('div.front').rotate3Di('unflip', 500, {sideChange: mySideChange});
 // add next question and answers
 	questionSetUp(quizQuestions[progress]);
 	progress++;	// add one to the progress count
@@ -169,7 +190,7 @@ function startOver(){
 
 $('div#intro button.startQuiz').on('click', startQuiz);
 
-$('div.question.choices input[type="submit"]').on('click', checkAnswer);
+
 
 $('button.nextQ').on('click', nextQuestion);
 
