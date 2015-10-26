@@ -4,9 +4,9 @@ $(document).ready(function(){
 
 var		progress = 0,
 		score = 0,
-		answer,
+		answerChoice,
 		quizQuestions =  [
-
+//set up all up questions
 			//Question One	
 			{ 	question : 	"How much sunlight typically " +
 							" makes it's way to the forest floor?",
@@ -64,43 +64,39 @@ var		progress = 0,
 		];
 
 
-//starts quiz when "Start quiz" button is pressed
+//FUNCTION: starts quiz when "Start quiz" button is pressed
 function startQuiz() {
-	$('div.back').hide();
-	$('div#intro').slideUp(800); //div slides up revealing quiz
+	$('div.back').hide(); // hides div with answer
+	$('div.front').show(); // hides div with answer
+	$('div#intro').slideUp(800); //intro div slides up revealing quiz question
 	$('div#quizPage').css('display', 'block'); // first quiz question is shown
-	questionSetUp(quizQuestions[progress]); // question added to card
-	progress++;	// add one to the progress count
-	$('div.question.choices input[type="submit"]').on('click', checkAnswer);
+	questionSetUp(quizQuestions[progress]); // function run to add question and choices
 }
 
 
-//place questions & choices in the question card
+// FUNCTION: place questions & choices in the question card
 function questionSetUp(question){
-	var questionTxt = $('.question legend'),
-		answerList = $('div#choiceArea');
-	//enter question #	
+	var questionTxt = $('.question legend'), // grabs question area
+		answerList = $('div#choiceArea'); // grabs div to insert answer choices
+	//Insert the current question number at top 	
 	$('.question > h2 > span.qNumber.front').html(progress + 1);
-	//enter question in legend
+	//Insert current question 
 	questionTxt.html(question.question);
-	// loop through choice array and enter input choices and labels 
+	// loop through choice array and enter radio buttons with answer choices 
 	for (var i = 0; i < question.choices.length; i++){
-		answerList.append('<label for="a' + 
-							(i+1) +
-							'">' +
-							'<input id="a' + 
-							(i+1) +
-							'"'+
-							' type="radio" name="questionOne" required value="' + 
-							i + 
-							'">' +
+		answerList.append('<label for="a' + (i) + '">' +
+							'<input id="a' + (i) + '"'+
+							' type="radio" name="answerChoice" required ' +
+							'value="' + i + '">' +
 							'<span>' + 
 							question.choices[i] +
 							'</label>');	
-	}	
+	}
+
+
 }
 
-// set up flip plogin for divs
+//FUNCTION: decide to show front or back when Rotate3D plugin is used
 function mySideChange(front) {
     if (front) {
         $('div.front').show();
@@ -113,86 +109,83 @@ function mySideChange(front) {
 }
 
 
-// hides question and checks/reveals answer and gives expanation
+//FUNCTION: Checks/reveals answer and gives answer details
 function checkAnswer(){
-	event.preventDefault();
-
-	$('h3.rightWrong').html('');
-	$('p.answerDetails').html('');
-
-//log answer
-	answer = $('input[type="radio"]:checked').val();
+	event.preventDefault(); // stop submit from reloading page
+	$('h3.rightWrong').html(''); // clear any previous answer feedback
+	$('p.answerDetails').html(''); // clear any previous answer details
+	answerChoice = $('form#questionForm input[type="radio"]:checked').val(); // captures selected answer
 	
-// plug in flips question to answer div
-	$('div.front').rotate3Di('flip', 250, {direction: 'clockwise', sideChange: mySideChange});
- 
-$('.question > h2 > span.qNumber.back').html(progress);
-//check if right or wrong and display result
-	if(answer == quizQuestions[progress-1].answer) {
+	$('div.front').hide(); // hides div with answer
+	$('div.back').show(); // hides div with answer
+
+	$('.question > h2 > span.qNumber.back').html(progress +1); // show question #
+
+	//check if right or wrong and display result
+	if(answerChoice == quizQuestions[progress].answer) {
 		$('h3.rightWrong').append('Correct!');	
 		score++;
 	} else {
 		$('h3.rightWrong').append('Nice Try but incorrect');
 	}
-//add the answer details
-	$('p.answerDetails').append(quizQuestions[progress-1].infoSection);
+	//add the answer details
+	$('p.answerDetails').append(quizQuestions[progress].infoSection);
 
-// check if last question
+	progress++;	// add one to the progress count
+
+	// If last question change "next" button to "show final score" button
 	if(progress == quizQuestions.length) {
 		$('div#buttonHolder').html('<button class="showScore">Show Final Score</button>');
-		$('button.showScore').on('click', showFinalScore);	
+		$('button.showScore').on('click', showFinalScore); // set up button to show final score info
 	}
 }
 
-// deletes question, choices, right/wrong text and answer info	
+// FUNCTION: Removes all previous question info	
 function clearAll() {
-	$('.question legend').html('');
-	$('div#choiceArea').html('');
-	$('h3.rightWrong').html('');
-	$('p.answerDetails').html('');
+	$('.question legend').html(''); //removes question
+	$('div#choiceArea').html(''); // removes choices
+	$('h3.rightWrong').html(''); // removes feedback
+	$('p.answerDetails').html(''); //removes answer details
 }
 
-
+// FUNCTION: Shows next question
 function nextQuestion(){
-	$('.question legend').html('');
-	$('div#choiceArea').html('');
-
-// flip answer panel - show question panel
-	$('div.front').rotate3Di('unflip', 500, {sideChange: mySideChange});
-// add next question and answers
-	questionSetUp(quizQuestions[progress]);
-	progress++;	// add one to the progress count
+	$('.question legend').html(''); // clears out old question
+	$('div#choiceArea').html(''); // clears out old choices
+	$('div.front').show(); // shows front question div
+	$('div.back').hide(); // hides back answer div
+	questionSetUp(quizQuestions[progress]); // adds in next quiz question and choices
 }
 
+//FUNCTION: Shows final score and resources and start over button
 function showFinalScore(){
 	clearAll();
-	$('.questionH2').html('YOUR SCORE');
-	$('div#buttonHolder').html('<button class="retakeQuiz">Retake Quiz</button>');
-	$('button.retakeQuiz').on('click', startOver);
-	$('h3.rightWrong').slideDown().css('text-align', 'center');
-	$('h3.rightWrong').html('You got ' + score + ' out of ' + progress + ' right!');
-
+	$('.questionH2').html('YOUR SCORE'); // changes H2 text
+	$('div#buttonHolder').html('<button class="retakeQuiz">Retake Quiz</button>'); // changes button text
+	$('button.retakeQuiz').on('click', startOver); // sets up startover function for button click
+	// shows final score
+	$('h3.rightWrong').html('You got ' + score + ' out of ' + progress + ' right!').css('textAlign', 'center');
 }
 
+//FUNCTION: Resets quiz to start over
 function startOver(){
-	progress = 0;
-	score = 0;
-	clearAll();
-	$('h3.rightWrong').css('text-align', 'left');
-	$('div#buttonHolder').html('<button class="nextQ">Next Question</button>');
-	$('.questionH2').html('Question <span class=qNumber></span>');
-	$('div.question.answer').fadeOut();
-	$('div.question.choices').fadeIn();
-	$('button.nextQ').on('click', nextQuestion);
+	progress = 0; // resets progress count
+	score = 0; // resets score
+	answerChoice = null; // resets answer choice
+	clearAll(); // clears out all other text and questions
+	$('h3.rightWrong').css('textAlign', 'left'); // realigns feedback text
+	$('.questionH2').html('Question <span class="qNumber front"></span>'); // recreates original H2
+	$('div#buttonHolder').html('<button class="nextQ">Next Question</button>'); // recreates "next question" button
+	$('button.nextQ').on('click', nextQuestion); // sets up click event for button again
 	startQuiz();
 }
 
 
-$('div#intro button.startQuiz').on('click', startQuiz);
+$('div#intro button.startQuiz').on('click', startQuiz); // sets up "start quiz" button
 
+$('div.question.choices input[type="submit"]').on('click', checkAnswer); // sets up "check answer" button
 
-
-$('button.nextQ').on('click', nextQuestion);
+$('button.nextQ').on('click', nextQuestion); // sets up "next question" button
 
 
 
