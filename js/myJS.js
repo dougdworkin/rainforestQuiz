@@ -134,7 +134,7 @@ function checkAnswer(){
 		$('p.answerDetails').append('<span class="answerHeader">The answers is:<br><em>' + 
 			currentQuestion.choices[currentQuestion.answer] + '</em></span>' +
 			currentQuestion.infoSection);
-
+		// moves snake along progress bar
 		if (progress==0){
 			$('div#snake').attr('class', 'firstQ');
 			console.log('snake'); 
@@ -152,7 +152,7 @@ function checkAnswer(){
 		if(progress == quizQuestions.length) {
 			$('div#buttonHolder').html('<button class="showScore">Show Final Score</button>');
 			$('button.showScore').on('click', showFinalScore); // set up button to show final score info
-			$('section.progressBar > h2').html('Questions completed');
+			$('section.progressBar > h2').html("You've completed the quiz");
 		}
 	}	
 }
