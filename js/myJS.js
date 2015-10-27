@@ -11,10 +11,10 @@ var		progress = 0,
 			{ 	question : 	"How much sunlight typically " +
 							" makes it's way to the forest floor?",
 				choices: 	[
-								"<em>99%</em> - It's bright and sunny!x",
-								"<em>70%</em> - There is a sofy hazy light.x",
-								"<em>40%</em> - It's kind of dark...x",
-								"<em>1%</em> - Who turned out the lights?x"
+								"<em>99%</em> - It's bright and sunny!",
+								"<em>70%</em> - There is a sofy hazy light.",
+								"<em>40%</em> - It's kind of dark...",
+								"<em>1%</em> - Who turned out the lights?"
 							],
 				answer: 	3,
 				infoSection:"More infirmation about the brightness goes here. Lorem" +
@@ -59,18 +59,19 @@ var		progress = 0,
 							],
 				answer: 	3,
 				infoSection:"More infirmation about the brightness goes here" 								
-			}
+			},
 
 		];
 
 
 //FUNCTION: starts quiz when "Start quiz" button is pressed
 function startQuiz() {
+	$('div.front').show(); // shows div with question
 	$('div.back').hide(); // hides div with answer
-	$('div.front').show(); // hides div with answer
 	$('div#intro').slideUp(800); //intro div slides up revealing quiz question
-	$('div#quizPage').css('display', 'block'); // first quiz question is shown
 	questionSetUp(quizQuestions[progress]); // function run to add question and choices
+	//inserts the number of questions that will be asked in progress bar
+	$('#quizPage h2 > span.questionCount').html(quizQuestions.length);
 }
 
 
@@ -78,8 +79,8 @@ function startQuiz() {
 function questionSetUp(question){
 	var questionTxt = $('.question legend'), // grabs question area
 		answerList = $('div#choiceArea'); // grabs div to insert answer choices
-	//Insert the current question number at top 	
-	$('.question > h2 > span.qNumber.front').html(progress + 1);
+	//Insert the current question number in progess bar	
+	$('#quizPage h2 > span.answered').html(progress + 1);
 	//Insert current question 
 	questionTxt.html(question.question);
 	// loop through choice array and enter radio buttons with answer choices 
@@ -92,52 +93,51 @@ function questionSetUp(question){
 							question.choices[i] +
 							'</label>');	
 	}
-
-
-}
-
-//FUNCTION: decide to show front or back when Rotate3D plugin is used
-function mySideChange(front) {
-    if (front) {
-        $('div.front').show();
-        $('div.back').hide();
-        
-    } else {
-        $('div.front').hide();
-        $('div.back').show();
-    }
 }
 
 
 //FUNCTION: Checks/reveals answer and gives answer details
 function checkAnswer(){
-	event.preventDefault(); // stop submit from reloading page
-	$('h3.rightWrong').html(''); // clear any previous answer feedback
-	$('p.answerDetails').html(''); // clear any previous answer details
+	// stop submit from reloading page
+	$('form#questionForm').submit(function(e){
+		e.preventDefault();
+	});
+
 	answerChoice = $('form#questionForm input[type="radio"]:checked').val(); // captures selected answer
-	
-	$('div.front').hide(); // hides div with answer
-	$('div.back').show(); // hides div with answer
 
-	$('.question > h2 > span.qNumber.back').html(progress +1); // show question #
-
-	//check if right or wrong and display result
-	if(answerChoice == quizQuestions[progress].answer) {
-		$('h3.rightWrong').append('Correct!');	
-		score++;
+	//Why does the required functionality only work if I have this if/else statement?
+	if (!answerChoice) {
+		
 	} else {
-		$('h3.rightWrong').append('Nice Try but incorrect');
-	}
-	//add the answer details
-	$('p.answerDetails').append(quizQuestions[progress].infoSection);
 
-	progress++;	// add one to the progress count
+		$('h3.rightWrong').html(''); // clear any previous answer feedback
+		$('p.answerDetails').html(''); // clear any previous answer details
+		
+		
+		$('div.front').hide(); // hides div with answer
+		$('div.back').show(); // hides div with answer
 
-	// If last question change "next" button to "show final score" button
-	if(progress == quizQuestions.length) {
-		$('div#buttonHolder').html('<button class="showScore">Show Final Score</button>');
-		$('button.showScore').on('click', showFinalScore); // set up button to show final score info
-	}
+		$('.question > h2 > span.qNumber.back').html(progress +1); // show question #
+
+		//check if right or wrong and display result
+		if(answerChoice == quizQuestions[progress].answer) {
+			$('h3.rightWrong').append('Correct!');	
+			score++;
+		} else {
+			$('h3.rightWrong').append('Nice Try but incorrect');
+		}
+		//add the answer details
+		$('p.answerDetails').append(quizQuestions[progress].infoSection);
+
+		progress++;	// add one to the progress count
+
+		// If last question change button and progress bar text
+		if(progress == quizQuestions.length) {
+			$('div#buttonHolder').html('<button class="showScore">Show Final Score</button>');
+			$('button.showScore').on('click', showFinalScore); // set up button to show final score info
+			$('section.progressBar > h2').html('Questions completed');
+		}
+	}	
 }
 
 // FUNCTION: Removes all previous question info	
@@ -160,11 +160,27 @@ function nextQuestion(){
 //FUNCTION: Shows final score and resources and start over button
 function showFinalScore(){
 	clearAll();
+	var scorePercent = (score * 100)/progress;
 	$('.questionH2').html('YOUR SCORE'); // changes H2 text
 	$('div#buttonHolder').html('<button class="retakeQuiz">Retake Quiz</button>'); // changes button text
 	$('button.retakeQuiz').on('click', startOver); // sets up startover function for button click
 	// shows final score
-	$('h3.rightWrong').html('You got ' + score + ' out of ' + progress + ' right!').css('textAlign', 'center');
+	$('h3.rightWrong')
+		.html('You got ' + score + ' out of ' + progress + ' right!'+
+				'<br><em>Your score is ' + scorePercent + '%</em>')
+		.css('textAlign', 'center');
+	//creates a div for score feedback	
+	$('<div class="scoreMessage"></div>' ).insertAfter('h3.rightWrong');
+	// gives message about players score	
+	if (scorePercent == 100){
+		$('div.scoreMessage').append('Great job braniac!<br>You got all the questions right!');
+	} else if (scorePercent >= 75){
+		$('div.scoreMessage').append('Good job! You got a lot of the questions right!');
+	} else if (scorePercent >=50){
+		$('div.scoreMessage').append('Not bad! Maybe you want to try again for a better score?');
+	} else {
+			$('div.scoreMessage').append('Too bad but nice try.<br>Maybe you want to try again for a better score?');
+	};
 }
 
 //FUNCTION: Resets quiz to start over
@@ -173,10 +189,13 @@ function startOver(){
 	score = 0; // resets score
 	answerChoice = null; // resets answer choice
 	clearAll(); // clears out all other text and questions
+	$('div.scoreMessage').remove(); // removes score message
 	$('h3.rightWrong').css('textAlign', 'left'); // realigns feedback text
 	$('.questionH2').html('Question <span class="qNumber front"></span>'); // recreates original H2
 	$('div#buttonHolder').html('<button class="nextQ">Next Question</button>'); // recreates "next question" button
 	$('button.nextQ').on('click', nextQuestion); // sets up click event for button again
+	// resets the progress bar header
+	$('section.progressBar > h2').html('Question <span class="answered">0</span> out of <span class="questionCount">4</span>');
 	startQuiz();
 }
 
