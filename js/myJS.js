@@ -17,10 +17,8 @@ var		progress = 0,
 								"<em>1%</em> - Who turned out the lights?"
 							],
 				answer: 	3,
-				infoSection:"More infirmation about the brightness goes here. Lorem" +
-							" ipsum dolor sit amet, consectetur adipisicing elit. Aliquam" +
-							" adipisci, mollitia quas autem doloremque maiores perspiciatis" +
-							" dicta odit fugit numquam iusto, ea veniam, id, cupiditate."
+				infoSection:"Rainforests aren’t as bright as one might think—less than one percent of sunlight reaches the forest floor." +
+							" The rainforest floor is often dark and humid due to constant shade from the canopy’s leaves."
 			},
 
 			//Question two		
@@ -33,7 +31,8 @@ var		progress = 0,
 								"Everyone's there but you"
 							],
 				answer: 	2,
-				infoSection:"More information about the % of species goes here" 								
+				infoSection:"More than half of the world's species of plants and animals are found in the rainforest."+
+							" Rainforests support a very broad array of fauna, including mammals, reptiles, birds and invertebrates."						
 			},
 
 			//Question three		
@@ -46,19 +45,25 @@ var		progress = 0,
 								"No more than 6"
 							],
 				answer: 	0,
-				infoSection:"More infirmation about the brightness goes here" 								
+				infoSection:"Brazil is home to more uncontacted peoples than anywhere on the planet. It is now thought that approximately 80 such groups live in the Amazon."+
+							" Some number several hundred and live in remote border areas and in protected territories."+
+							" Others are scattered fragments, the survivors of tribes virtually wiped out by the impacts of the rubber boom and expanding agriculture in the last century" 								
 			},
 
 			//Question four		
-			{ 	question : 	"This is question 4", 
+			{ 	question : 	"How often is an area of rainforest the size of a football field destroyed daily?", 
 				choices: 	[
-								"<em>99%</em> - It's bright and sunny!",
-								"<em>70%</em> - There is a sofy hazy light.",
-								"<em>40%</em> - It's kind of dark...",
-								"<em>1%</em> - Who turned out the lights?"
+								"Once a day",
+								"Every hour",
+								"Every minute",
+								"Every second"
 							],
 				answer: 	3,
-				infoSection:"More infirmation about the brightness goes here" 								
+				infoSection:"That is more than 150 acres lost every minute of every day," +
+							" and 78 million acres lost every year! More than 20 percent of" +
+							" the Amazon rainforest is already gone, and much more is severely threatened "+
+							"as the destruction continues. It is estimated that the Amazon alone is vanishing" +
+							" at a rate of 20,000 square miles a year." 								
 			},
 
 		];
@@ -104,6 +109,7 @@ function checkAnswer(){
 	});
 
 	answerChoice = $('form#questionForm input[type="radio"]:checked').val(); // captures selected answer
+	currentQuestion = quizQuestions[progress];
 
 	//Why does the required functionality only work if I have this if/else statement?
 	if (!answerChoice) {
@@ -117,8 +123,6 @@ function checkAnswer(){
 		$('div.front').hide(); // hides div with answer
 		$('div.back').show(); // hides div with answer
 
-		$('.question > h2 > span.qNumber.back').html(progress +1); // show question #
-
 		//check if right or wrong and display result
 		if(answerChoice == quizQuestions[progress].answer) {
 			$('h3.rightWrong').append('Correct!');	
@@ -127,7 +131,20 @@ function checkAnswer(){
 			$('h3.rightWrong').append('Nice Try but incorrect');
 		}
 		//add the answer details
-		$('p.answerDetails').append(quizQuestions[progress].infoSection);
+		$('p.answerDetails').append('<span class="answerHeader">The answers is:<br><em>' + 
+			currentQuestion.choices[currentQuestion.answer] + '</em></span>' +
+			currentQuestion.infoSection);
+
+		if (progress==0){
+			$('div#snake').attr('class', 'firstQ');
+			console.log('snake'); 
+		}else if (progress==1){
+			$('div#snake').attr('class','halfWay'); 
+		}else if(progress==2){
+			$('div#snake').attr('class', 'twoThirds'); 
+		}else {
+			$('div#snake').attr('class', 'complete'); 
+		}
 
 		progress++;	// add one to the progress count
 
@@ -179,7 +196,7 @@ function showFinalScore(){
 	} else if (scorePercent >=50){
 		$('div.scoreMessage').append('Not bad! Maybe you want to try again for a better score?');
 	} else {
-			$('div.scoreMessage').append('Too bad but nice try.<br>Maybe you want to try again for a better score?');
+			$('div.scoreMessage').append('Too bad but nice try.<br> Maybe you want to try again for a better score?');
 	};
 }
 
@@ -190,6 +207,7 @@ function startOver(){
 	answerChoice = null; // resets answer choice
 	clearAll(); // clears out all other text and questions
 	$('div.scoreMessage').remove(); // removes score message
+	$('div#snake').attr('class', 'start'); //sets snake back to begining
 	$('h3.rightWrong').css('textAlign', 'left'); // realigns feedback text
 	$('.questionH2').html('Question <span class="qNumber front"></span>'); // recreates original H2
 	$('div#buttonHolder').html('<button class="nextQ">Next Question</button>'); // recreates "next question" button
